@@ -67,7 +67,7 @@ std::istream& operator>>(std::istream& in, String& other)
 	char data[1024];
 	int i = 0;
 	in >> data[i];
-	while (data[i] != '\n' && (data[i] != '<' && i != 0) && data[i] != '>')
+	while (data[i] != '\n' && (data[i] != '<' || i == 0) && data[i] != '>')
 	{
 		i++;
 		in >> data[i];
