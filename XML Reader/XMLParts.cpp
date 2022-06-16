@@ -44,6 +44,30 @@ XMLPart* Text::Clone()
 
 
 
+
+
+
+
+
+String OpeningTag::GetName() const
+{
+	return this->name;
+}
+unsigned int OpeningTag::GetNumberOfAttributes() const
+{
+	return this->attributes.GetSize();
+}
+Pair<String> OpeningTag::GetAttribute(unsigned int index) const
+{
+	return this->attributes[index];
+}
+String OpeningTag::GetId() const
+{
+	return this->id;
+}
+
+
+
 void OpeningTag::Split()
 {
 	unsigned int size = this->XML_data.GetSize(), i=1;
@@ -69,9 +93,15 @@ void OpeningTag::Split()
 				i++;
 			}
 			attribute.second = this->XML_data.GetSubString(j, i);
-			i+=2;
+			i +=2;
+			j = i--;
+			if(attribute.first == "id")
+			{ 
+				id = attribute.second;
+			}
+			else attributes.Add(attribute);
 		}
-		attributes.Add(attribute);
+		i++;
 	}
 
 }
@@ -79,6 +109,7 @@ void OpeningTag::Split()
 OpeningTag::OpeningTag(const String& string)
 {
 	this->XML_data = string;
+	this->id = "";
 	this->Split();
 }
 
@@ -88,7 +119,7 @@ String OpeningTag::TypeOfData()
 }
 bool operator==(const OpeningTag& string1, const OpeningTag& string2)
 {
-	if (string1.XML_data == string2.XML_data)
+	if (string1.name == string2.name)
 	{
 		return true;
 	}

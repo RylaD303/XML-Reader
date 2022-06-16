@@ -26,6 +26,14 @@ public:
 	virtual String TypeOfData() = 0;
 	virtual bool CheckValidity() = 0;
 	virtual XMLPart* Clone()=0;
+	friend bool operator==(const XMLPart& string1, const String& string2)
+	{
+		if (string1.XML_data == string2)
+		{
+			return true;
+		}
+		return false;
+	}
 };
 
 class Text : XMLPart
@@ -44,7 +52,13 @@ private:
 	String name;
 	Vector<Pair<String>> attributes;
 	void Split();
+	String id;
 public:
+	String GetName() const;
+	unsigned int GetNumberOfAttributes() const;
+	Pair<String> GetAttribute(unsigned int index) const;
+	String GetId() const;
+
 	OpeningTag(const String& string);
 	String TypeOfData() override;
 	friend bool operator==(const OpeningTag& string1, const OpeningTag& string2);

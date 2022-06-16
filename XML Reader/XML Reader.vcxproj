@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="String.cpp" />
+    <ClCompile Include="Tests.cpp" />
     <ClCompile Include="XML Reader.cpp" />
     <ClCompile Include="XMLParts.cpp" />
   </ItemGroup>
