@@ -1,5 +1,8 @@
 #include "String.h"
 #include<cstring>
+
+static bool started_new_tag = false;
+
 void String::Free()
 {
 	delete[] this->data;
@@ -66,12 +69,22 @@ std::istream& operator>>(std::istream& in, String& other)
 {
 	char data[1024];
 	int i = 0;
+	if (started_new_tag)
+	{
+		data[i] = '<';
+		i++;
+		started_new_tag = false;
+	}
 	in >> data[i];
 	while (data[i] != '\n' && (data[i] != '<' || i == 0) && data[i] != '>')
 	{
-		i++;
-		in >> data[i];
+		if (!(i == 0 && data[i] == '\t'))
+		{
+			i++;
+			in >> data[i];
+		}
 	}
+	if (data[i] == '<') started_new_tag = true;
 	other = data;
 
 	return in;
@@ -113,4 +126,14 @@ bool operator==(const String& string1, const String& string2)
 		equal = false;
 	}
 	return equal;
+}
+
+String String::GetSubString(const unsigned int i, const unsigned int j)
+{
+	if (i >= this->size || j >= this->size)std::cout << "NANI?!" << std::endl;
+	char delim = this->data[j];
+	this->data[j] = '\0';
+	String copy(this->data + i);
+	this->data[j] = delim;
+	return copy;
 }

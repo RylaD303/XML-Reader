@@ -141,10 +141,12 @@
   <ItemGroup>
     <ClCompile Include="String.cpp" />
     <ClCompile Include="XML Reader.cpp" />
+    <ClCompile Include="XMLParts.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="String.h" />
     <ClInclude Include="Vector.hpp" />
+    <ClInclude Include="XMLParts.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

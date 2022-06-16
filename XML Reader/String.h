@@ -81,5 +81,8 @@ public:
 		redefinition of the operator - ==. Retuns true or false value, depending on if both strings contain the same data of chars;
 	*/
 	friend bool operator==(const String& string1, const String& string2);
+
+
+	String GetSubString(unsigned int i, unsigned int j);
 };
 
