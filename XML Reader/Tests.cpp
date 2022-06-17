@@ -121,6 +121,8 @@ void TestXMLParts()
 	TEST_CHECK(tag2.GetName() == "/opening");
 	TEST_CHECK(tag1.GetId() == "1");
 	TEST_CHECK(tag2.GetId() == "");
+	//TEST_CHECK(tag1.CheckValidity());
+	//TEST_CHECK(!(tag2.CheckValidity()));
 	TEST_CHECK(tag1.GetAttribute(0).first == "font");
 	TEST_CHECK(tag1.GetAttribute(0).second == "magenta");
 	TEST_CHECK(tag1.GetAttribute(1).first == "size");

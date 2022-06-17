@@ -130,7 +130,7 @@ String String::GetSubString(const unsigned int i, const unsigned int j)
 void String::GetTags(Vector<String>& strings)
 {
 	unsigned int i = 0,j;
-	while (this->data[i++] == '\t')
+	while (this->data[i] == '\t'){i++;}
 
 	j = i;
 	while (i < this->size)
@@ -142,7 +142,7 @@ void String::GetTags(Vector<String>& strings)
 				strings.Add(this->GetSubString(j, i));
 			}
 			j = i;
-			while (this->data[i] != '>' && i++ < this->size);
+			while (this->data[i] != '>' && i < this->size){i++;}
 
 			strings.Add(this->GetSubString(j, i + 1));
 			j = i + 1;
