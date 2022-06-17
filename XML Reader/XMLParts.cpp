@@ -9,6 +9,7 @@
 Text::Text(const String& string)
 {
 	this->XML_data = string;
+	this->is_tag = true;
 }
 
 String Text::TypeOfData()
@@ -110,6 +111,7 @@ OpeningTag::OpeningTag(const String& string)
 {
 	this->XML_data = string;
 	this->id = "";
+	this->is_tag = true;
 	this->Split();
 }
 
@@ -145,4 +147,63 @@ bool OpeningTag::CheckValidity()
 XMLPart* OpeningTag::Clone()
 {
 	return new OpeningTag(*this);
+}
+
+
+
+
+void ClosingTag::Split()
+{
+	unsigned int size = this->XML_data.GetSize(), i = 2;
+	char delim = ' ';
+	while (this->XML_data[i] != ' ' && this->XML_data[i] != '>' && i < size)
+	{
+		i++;
+	}
+	this->name = this->XML_data.GetSubString(1, i);
+}
+
+ClosingTag::ClosingTag(const String& string)
+{
+	this->XML_data = string;
+	this->is_tag = true;
+	this->Split();
+}
+
+String  ClosingTag::TypeOfData()
+{
+	return "ClosingTag";
+}
+bool operator==(const ClosingTag& string1, const OpeningTag& string2)
+{
+	if (string1.name == string2.GetName())
+	{
+		return true;
+	}
+	return false;
+}
+bool operator==(const OpeningTag& string1, const ClosingTag& string2)
+{
+	return (string2 == string1);
+}
+bool ClosingTag::CheckValidity()
+{
+	unsigned int size = this->XML_data.GetSize();
+	if (this->XML_data[size - 1] != '>' || this->XML_data[0] != '<' || this->XML_data[1]!='/')
+	{
+		return false;
+	}
+	for (int i = 2; i < size - 1; i++)
+	{
+		if (this->XML_data[i] == '>' || this->XML_data[i] == '<' || this->XML_data[i] == '/')
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+XMLPart* ClosingTag::Clone()
+{
+	return new ClosingTag(*this);
 }

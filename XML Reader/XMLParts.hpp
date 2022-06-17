@@ -13,6 +13,7 @@ class XMLPart
 {
 protected:
 	String XML_data;
+	bool is_tag;
 public:
 	String GetXMLData() const
 	{
@@ -66,3 +67,19 @@ public:
 	XMLPart* Clone() override;
 };
 
+class ClosingTag : XMLPart
+{
+private:
+	String name;
+	void Split();
+public:
+	String GetName() const;
+
+	ClosingTag(const String& string);
+	String TypeOfData() override;
+	friend bool operator==(const ClosingTag& string1, const ClosingTag& string2);
+	friend bool operator==(const ClosingTag& string1, const OpeningTag& string2);
+	friend bool operator==(const OpeningTag& string1, const ClosingTag& string2);
+	bool CheckValidity() override;
+	XMLPart* Clone() override;
+};
