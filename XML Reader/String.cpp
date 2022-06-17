@@ -112,7 +112,12 @@ bool operator==(const String& string1, const String& string2)
 
 String String::GetSubString(const unsigned int i, const unsigned int j)
 {
-	if (i >= this->size || j >= this->size)std::cout << "NANI?!" << std::endl;
+	if (i > this->size || j > this->size)
+	{
+		std::cout << "NANI?!" << std::endl;
+		return "";
+	}
+
 	char delim = this->data[j];
 	this->data[j] = '\0';
 	String copy(this->data + i);
@@ -125,10 +130,8 @@ String String::GetSubString(const unsigned int i, const unsigned int j)
 void String::GetTags(Vector<String>& strings)
 {
 	unsigned int i = 0,j;
-	while (this->data[i] == '\t')
-	{
-		i++;
-	}
+	while (this->data[i++] == '\t')
+
 	j = i;
 	while (i < this->size)
 	{
@@ -139,10 +142,8 @@ void String::GetTags(Vector<String>& strings)
 				strings.Add(this->GetSubString(j, i));
 			}
 			j = i;
-			while (this->data[i] != '>' && i < this->size);
-			{
-				i++;
-			}
+			while (this->data[i] != '>' && i++ < this->size);
+
 			strings.Add(this->GetSubString(j, i + 1));
 			j = i + 1;
 		}
