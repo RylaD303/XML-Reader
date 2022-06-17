@@ -72,11 +72,13 @@ void TestXMLParts()
 	TEST_CHECK(text == (Text)"I am a man");
 	TEST_CHECK(!(text == (Text)"I am a ma"));
 	TEST_CHECK(text.TypeOfData() == "Text");
+	TEST_CHECK(text.CheckValidity());
 
 	XMLPart* text2 = text.Clone();
 	TEST_CHECK(*text2 == (String)"I am a man");
 	TEST_CHECK(!(*text2 == (String)"I am a ma"));
 	TEST_CHECK(text2->TypeOfData() == "Text");
+	TEST_CHECK(text2->CheckValidity());
 	
 	OpeningTag open_tag("<opening id=\"1\" font=\"magenta\" size=\"big\" >");
 	TEST_CHECK(open_tag.GetName() == "opening");
@@ -87,6 +89,7 @@ void TestXMLParts()
 	TEST_CHECK(open_tag.GetAttribute(0).second == "magenta");
 	TEST_CHECK(open_tag.GetAttribute(1).first == "size");
 	TEST_CHECK(open_tag.GetAttribute(1).second == "big");
+	TEST_CHECK(open_tag.CheckValidity());
 
 	OpeningTag open_tag2("<opening>");
 	TEST_CHECK(open_tag2.GetName() == "opening");

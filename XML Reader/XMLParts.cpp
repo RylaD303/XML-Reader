@@ -128,7 +128,7 @@ bool operator==(const OpeningTag& string1, const OpeningTag& string2)
 bool OpeningTag::CheckValidity()
 {
 	unsigned int size = this->XML_data.GetSize();
-	if (this->XML_data[size] != '>' || this->XML_data[0] != '<')
+	if (this->XML_data[size-1] != '>' || this->XML_data[0] != '<')
 	{
 		return false;
 	}

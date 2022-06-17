@@ -1,6 +1,7 @@
 #pragma once
 #pragma once
 #include<iostream>
+#include"Vector.hpp"
 /**
 	Classical string class, dynamic char array
 */
@@ -84,5 +85,7 @@ public:
 
 
 	String GetSubString(unsigned int i, unsigned int j);
+
+	void GetTags(Vector<String>& strings);
 };
 

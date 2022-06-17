@@ -1,7 +1,6 @@
 #include "String.h"
 #include<cstring>
 
-static bool started_new_tag = false;
 
 void String::Free()
 {
@@ -67,26 +66,9 @@ String& String::operator+=(const String& other)
 
 std::istream& operator>>(std::istream& in, String& other)
 {
-	char data[1024];
-	int i = 0;
-	if (started_new_tag)
-	{
-		data[i] = '<';
-		i++;
-		started_new_tag = false;
-	}
-	in >> data[i];
-	while (data[i] != '\n' && (data[i] != '<' || i == 0) && data[i] != '>')
-	{
-		if (!(i == 0 && data[i] == '\t'))
-		{
-			i++;
-			in >> data[i];
-		}
-	}
-	if (data[i] == '<') started_new_tag = true;
+	char data[2048];
+	in.getline(data, 2048);
 	other = data;
-
 	return in;
 }
 std::ostream& operator<<(std::ostream& out, const String& other)
@@ -136,4 +118,42 @@ String String::GetSubString(const unsigned int i, const unsigned int j)
 	String copy(this->data + i);
 	this->data[j] = delim;
 	return copy;
+}
+
+
+
+void String::GetTags(Vector<String>& strings)
+{
+	unsigned int i = 0,j;
+	while (this->data[i] == '\t')
+	{
+		i++;
+	}
+	j = i;
+	while (i < this->size)
+	{
+		if (this->data[i] == '<')
+		{
+			if (i != j)
+			{
+				strings.Add(this->GetSubString(j, i));
+			}
+			j = i;
+			while (this->data[i] != '>' && i < this->size);
+			{
+				i++;
+			}
+			strings.Add(this->GetSubString(j, i + 1));
+			j = i + 1;
+		}
+		i++;
+	}
+
+	String last_word = this->GetSubString(j,i);
+	
+	if (!(last_word == "") && !(last_word== " "))
+	{
+		strings.Add(last_word);
+	}
+
 }
