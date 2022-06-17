@@ -13,8 +13,17 @@ class XMLPart
 {
 protected:
 	String XML_data;
-	bool is_tag;
+	bool is_open_tag;
+	bool is_close_tag;
 public:
+	bool IsOpeningTag() const
+	{
+		return this->is_open_tag;
+	}
+	bool IsOpeningTag() const
+	{
+		return this->is_close_tag;
+	}
 	String GetXMLData() const
 	{
 		return this->XML_data;
@@ -77,7 +86,6 @@ public:
 
 	ClosingTag(const String& string);
 	String TypeOfData() override;
-	friend bool operator==(const ClosingTag& string1, const ClosingTag& string2);
 	friend bool operator==(const ClosingTag& string1, const OpeningTag& string2);
 	friend bool operator==(const OpeningTag& string1, const ClosingTag& string2);
 	bool CheckValidity() override;

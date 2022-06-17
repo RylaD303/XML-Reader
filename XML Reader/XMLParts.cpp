@@ -9,7 +9,8 @@
 Text::Text(const String& string)
 {
 	this->XML_data = string;
-	this->is_tag = true;
+	this->is_open_tag = false;
+	this->is_close_tag = false;
 }
 
 String Text::TypeOfData()
@@ -111,7 +112,8 @@ OpeningTag::OpeningTag(const String& string)
 {
 	this->XML_data = string;
 	this->id = "";
-	this->is_tag = true;
+	this->is_open_tag = true;
+	this->is_close_tag = false;
 	this->Split();
 }
 
@@ -151,6 +153,10 @@ XMLPart* OpeningTag::Clone()
 
 
 
+String ClosingTag::GetName() const
+{
+	return this->name;
+}
 
 void ClosingTag::Split()
 {
@@ -166,7 +172,8 @@ void ClosingTag::Split()
 ClosingTag::ClosingTag(const String& string)
 {
 	this->XML_data = string;
-	this->is_tag = true;
+	this->is_open_tag = false;
+	this->is_close_tag = true;
 	this->Split();
 }
 
