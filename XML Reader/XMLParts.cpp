@@ -9,6 +9,7 @@
 Text::Text(const String& string)
 {
 	this->XML_data = string;
+	this->name = string;
 	this->is_open_tag = false;
 	this->is_close_tag = false;
 }
@@ -48,13 +49,6 @@ XMLPart* Text::Clone()
 
 
 
-
-
-
-String OpeningTag::GetName() const
-{
-	return this->name;
-}
 unsigned int OpeningTag::GetNumberOfAttributes() const
 {
 	return this->attributes.GetSize();
@@ -121,14 +115,7 @@ String OpeningTag::TypeOfData()
 {
 	return "OpeningTag";
 }
-bool operator==(const OpeningTag& string1, const OpeningTag& string2)
-{
-	if (string1.name == string2.name)
-	{
-		return true;
-	}
-	return false;
-}
+
 bool OpeningTag::CheckValidity()
 {
 	unsigned int size = this->XML_data.GetSize();
@@ -153,20 +140,15 @@ XMLPart* OpeningTag::Clone()
 
 
 
-String ClosingTag::GetName() const
-{
-	return this->name;
-}
-
 void ClosingTag::Split()
 {
 	unsigned int size = this->XML_data.GetSize(), i = 2;
-	char delim = ' ';
 	while (this->XML_data[i] != ' ' && this->XML_data[i] != '>' && i < size)
 	{
 		i++;
 	}
-	this->name = this->XML_data.GetSubString(1, i);
+	this->name = this->XML_data.GetSubString(2, i);
+
 }
 
 ClosingTag::ClosingTag(const String& string)
@@ -181,18 +163,7 @@ String  ClosingTag::TypeOfData()
 {
 	return "ClosingTag";
 }
-bool operator==(const ClosingTag& string1, const OpeningTag& string2)
-{
-	if (string1.name == string2.GetName())
-	{
-		return true;
-	}
-	return false;
-}
-bool operator==(const OpeningTag& string1, const ClosingTag& string2)
-{
-	return (string2 == string1);
-}
+
 bool ClosingTag::CheckValidity()
 {
 	unsigned int size = this->XML_data.GetSize();

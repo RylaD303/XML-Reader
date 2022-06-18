@@ -1,7 +1,5 @@
 #include "../acutest/include/acutest.h"
-#include "String.h"
-#include "XMLParts.hpp"
-#include "Vector.hpp"
+#include "XMLContainer.h"
 #include <iostream>
 void TestString()
 {
@@ -88,13 +86,13 @@ void TestXMLParts()
 	TEST_CHECK(!(text_wrong.CheckValidity()));
 	Text text_wrong2("ope>en");
 	TEST_CHECK(!(text_wrong2.CheckValidity()));
-	
+
 
 
 	OpeningTag open_tag("<opening id=\"1\" font=\"magenta\" size=\"big\" >");
 	TEST_CHECK(open_tag.GetName() == "opening");
 	TEST_CHECK(!(open_tag.GetName() == "opening "));
-	TEST_CHECK(open_tag.GetId()=="1");
+	TEST_CHECK(open_tag.GetId() == "1");
 	TEST_CHECK(open_tag.GetNumberOfAttributes() == 2);
 	TEST_CHECK(open_tag.GetAttribute(0).first == "font");
 	TEST_CHECK(open_tag.GetAttribute(0).second == "magenta");
@@ -115,14 +113,14 @@ void TestXMLParts()
 	String line("<opening id=\"1\" font=\"magenta\" size=\"big\" >Opening Tag</opening>");
 	Vector<String> tags;
 	line.GetTags(tags);
-	OpeningTag tag1(tags[0]), tag2(tags[2]);
+	OpeningTag tag1(tags[0]);
+	ClosingTag tag2(tags[2]);
 	Text text3(tags[1]);
 	TEST_CHECK(tag1.GetName() == "opening");
-	TEST_CHECK(tag2.GetName() == "/opening");
+	TEST_CHECK(tag2.GetName() == "opening");
 	TEST_CHECK(tag1.GetId() == "1");
-	TEST_CHECK(tag2.GetId() == "");
 	TEST_CHECK(tag1.CheckValidity());
-	TEST_CHECK(!(tag2.CheckValidity()));
+	TEST_CHECK(tag2.CheckValidity());
 	TEST_CHECK(tag1.GetAttribute(0).first == "font");
 	TEST_CHECK(tag1.GetAttribute(0).second == "magenta");
 	TEST_CHECK(tag1.GetAttribute(1).first == "size");
@@ -131,12 +129,45 @@ void TestXMLParts()
 	TEST_CHECK(text3 == (Text)"Opening Tag");
 
 
-	
+}
 
+
+
+void TestXMLContainer()
+{
+	String line("<opening id=\"1\" font=\"magenta\" size=\"big\" >Opening Tag</opening>");
+	Vector<String> tags;
+	line.GetTags(tags);
+	XMLContainer test_container;
+
+	test_container.Add(tags[0]);
+	test_container.Add(tags[1]);
+	test_container.Add(tags[2]);
+
+	TEST_CHECK(test_container[0].CheckValidity());
+	TEST_CHECK(test_container[1].CheckValidity());
+	TEST_CHECK(test_container[2].CheckValidity());
+
+
+	TEST_CHECK(test_container[0] == "opening");
+	TEST_CHECK(test_container[2] == "opening");
+
+	TEST_CHECK(test_container[0].IsOpeningTag());
+	TEST_CHECK(!(test_container[1].IsClosingTag() || test_container[1].IsOpeningTag()));
+	TEST_CHECK(test_container[2].IsClosingTag());
+
+	test_container.Remove(1, 1);
+
+	TEST_CHECK(test_container[0] == "opening");
+	TEST_CHECK(test_container[1] == "opening");
+
+	TEST_CHECK(test_container[0].IsOpeningTag());
+	TEST_CHECK(test_container[1].IsClosingTag());
 }
 
 TEST_LIST = {
 	{"String", TestString},
 	{"Vector", TestVector},
 	{"XMLParts", TestXMLParts},
+	{"XMLContainer",TestXMLContainer},
 	{NULL, NULL} };

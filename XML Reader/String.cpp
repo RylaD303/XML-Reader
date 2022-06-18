@@ -78,7 +78,7 @@ std::ostream& operator<<(std::ostream& out, const String& other)
 	return out;
 }
 
-char& String::operator[](const unsigned int i) const
+const char& String::operator[](const unsigned int i) const
 {
 	return this->data[i];
 }

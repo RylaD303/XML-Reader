@@ -70,7 +70,7 @@ public:
 	/**
 		redefinition of the operator[]const - returns the value in the specified index of the array of chars. It is constant so it is only used for reading.
 	*/
-	char& operator[](const unsigned int i) const;
+	const char& operator[](const unsigned int i) const;
 	/**
 		redefinition of the operator[] - returns the pointer to the value on the specified cell of the array of chars.
 		Gives the possiblity to change the value of the cell.

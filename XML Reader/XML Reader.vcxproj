@@ -142,11 +142,13 @@
     <ClCompile Include="String.cpp" />
     <ClCompile Include="Tests.cpp" />
     <ClCompile Include="XML Reader.cpp" />
+    <ClCompile Include="XMLContainer.cpp" />
     <ClCompile Include="XMLParts.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="String.h" />
     <ClInclude Include="Vector.hpp" />
+    <ClInclude Include="XMLContainer.h" />
     <ClInclude Include="XMLParts.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

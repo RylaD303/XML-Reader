@@ -129,6 +129,17 @@ public:
 			}
 		}
 	}
+	void Remove(unsigned int i)
+	{
+		if(i < this->size)
+		{
+			this->size--;
+			for (i; i < this->size; i++)
+			{
+				this->data[i] = this->data[i + 1];
+			}
+		}
+	}
 	/**
 		Sort Vector method.
 	*/

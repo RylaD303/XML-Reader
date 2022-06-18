@@ -12,19 +12,24 @@ struct Pair
 class XMLPart
 {
 protected:
+	String name;
 	String XML_data;
 	bool is_open_tag;
 	bool is_close_tag;
 public:
-	bool IsOpeningTag() const
+	const String& GetName() const 
+	{
+		return this->name;
+	}
+	const bool IsOpeningTag() const
 	{
 		return this->is_open_tag;
 	}
-	bool IsOpeningTag() const
+	const bool IsClosingTag() const
 	{
 		return this->is_close_tag;
 	}
-	String GetXMLData() const
+	const String& GetXMLData() const
 	{
 		return this->XML_data;
 	}
@@ -32,13 +37,13 @@ public:
 	{
 		this -> XML_data = _data;
 	}
-	virtual ~XMLPart() {};
+	virtual ~XMLPart() = default;
 	virtual String TypeOfData() = 0;
 	virtual bool CheckValidity() = 0;
 	virtual XMLPart* Clone()=0;
 	friend bool operator==(const XMLPart& string1, const String& string2)
 	{
-		if (string1.XML_data == string2)
+		if (string1.name == string2)
 		{
 			return true;
 		}
@@ -46,7 +51,7 @@ public:
 	}
 };
 
-class Text : XMLPart
+class Text : public XMLPart
 {
 public:
 	Text(const String& string);
@@ -56,38 +61,30 @@ public:
 	XMLPart* Clone() override;
 };
 
-class OpeningTag : XMLPart
+class OpeningTag : public XMLPart
 {
 private:
-	String name;
 	Vector<Pair<String>> attributes;
 	void Split();
 	String id;
 public:
-	String GetName() const;
 	unsigned int GetNumberOfAttributes() const;
 	Pair<String> GetAttribute(unsigned int index) const;
 	String GetId() const;
 
 	OpeningTag(const String& string);
 	String TypeOfData() override;
-	friend bool operator==(const OpeningTag& string1, const OpeningTag& string2);
 	bool CheckValidity() override;
 	XMLPart* Clone() override;
 };
 
-class ClosingTag : XMLPart
+class ClosingTag : public XMLPart
 {
 private:
-	String name;
 	void Split();
 public:
-	String GetName() const;
-
 	ClosingTag(const String& string);
 	String TypeOfData() override;
-	friend bool operator==(const ClosingTag& string1, const OpeningTag& string2);
-	friend bool operator==(const OpeningTag& string1, const ClosingTag& string2);
 	bool CheckValidity() override;
 	XMLPart* Clone() override;
 };
