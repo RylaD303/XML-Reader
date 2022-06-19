@@ -1,7 +1,19 @@
 #include "XMLParts.hpp"
 
-
-
+static unsigned int element_counter=0;
+String GetElementCounter()
+{
+	element_counter++;
+	unsigned int element_counter_copy = element_counter;
+	String number;
+	while (element_counter_copy > 0)
+	{
+		char num = (char)(element_counter_copy % 10 + '0');
+		number += (String)&num;
+		element_counter_copy /= 10;
+	}
+	return number;
+}
 
 
 
@@ -79,6 +91,10 @@ void OpeningTag::Split()
 		}
 		i++;
 	}
+	if (this->id == "")
+	{
+		this->id = GetElementCounter();
+	}
 
 }
 OpeningTag::OpeningTag(const String& string)
@@ -93,10 +109,9 @@ void OpeningTag::ReWrite()
 {
 	this->XML_data = (String)"<" + this->name;
 	unsigned int size = attributes.GetSize();
-	if (!(this->id == ""))
-	{
-		this->XML_data += (String)" id=\"" + this->id + "\"";
-	}
+
+	this->XML_data += (String)" id=\"" + this->id + "\"";
+
 	for (unsigned int i = 0; i < size; i++)
 	{
 		this->XML_data += (String)" " + this->attributes[i].first + "=\"" + this->attributes[i].second + "\"";

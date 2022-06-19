@@ -24,13 +24,13 @@ class CommandMode
 {
 public:
 	static void Print();
-	static void Select(const String& id, const String& key);
-	static void Set(const String& id, const String& key, const String& value);
+	static bool Select(const String& id, const String& key);
+	static bool Set(const String& id, const String& key, const String& value);
 	static void Children(const String& id);
-	static void Child(const String& id, const String& index);
+	static void Child(const String& id, const String& _n);
 	static void TextOfElement(const String& id);
 	static void Delete(const String& id, const String& key);
 	static void NewChild(const String& id);
-
+	static void Xpath(const String& command);
 
 };

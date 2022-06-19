@@ -31,7 +31,6 @@ static bool CheckXMLFileValidity(const String& file_name)
 	}
 	return false;
 }
-
 static void ReWrite()
 {
 	unsigned int size = CommandPrompt::xml_content.GetSize();
@@ -81,6 +80,43 @@ static void YesOrNo(String& answer)
 		std::cin >> answer;
 	}
 }
+static int SelectId(const String& id)
+{
+	unsigned int size = CommandPrompt::xml_content.GetSize();
+	for (unsigned int i = 0; i < size; i++)
+	{
+		if (CommandPrompt::xml_content[i].GetId() == id)
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+static int GetClosingTag(const int i)
+{
+	unsigned int size = CommandPrompt::xml_content.GetSize();
+	int j = i+1;
+	for (j; j > size; j++)
+	{
+		if (CommandPrompt::xml_content[i] == CommandPrompt::xml_content[j].GetName())
+			return j;
+	}
+
+	return j;
+}
+static int GetNumber(const String& _n)
+{
+	unsigned int size = _n.GetSize();
+	long long number = 0;
+	for (unsigned int i = 0; i < size; i++)
+	{
+		number *= 10;
+		number += (long long)(_n[i] - '0');
+	}
+	return number;
+}
+
+
 
 void CommandPrompt::OpenFile()
 {
@@ -165,3 +201,108 @@ bool CommandPrompt::Exit()
 	}
 	return false;
 }
+
+
+
+void CommandMode::Print()
+{
+	Show();
+}
+bool CommandMode::Select(const String& id, const String& key)
+{
+	int i = SelectId(id);
+	if(i!=-1)
+	{
+		unsigned int number_of_attributes = CommandPrompt::xml_content[i].GetSize();
+		for (unsigned int j = 0; j < number_of_attributes; j++)
+		{
+			Pair<String> attribute = CommandPrompt::xml_content[i].GetAttribute(j);
+			if (attribute.first == key)
+			{
+				std::cout << key<<": "<< attribute.second << std::endl;
+				return true;
+			}
+		}
+
+	}
+	return false;
+}
+bool CommandMode::Set(const String& id, const String& key, const String& value)
+{
+	int i = SelectId(id);
+	if (i != -1)
+	{
+		unsigned int number_of_attributes = CommandPrompt::xml_content[i].GetSize();
+		for (unsigned int j = 0; j < number_of_attributes; j++)
+		{
+			Pair<String> attribute = CommandPrompt::xml_content[i].GetAttribute(j);
+			if (attribute.first == key)
+			{
+				attribute.second = value;
+				CommandPrompt::xml_content[i].SetAttribute(j, attribute);
+				std::cout << "Successfully changed" << std::endl;
+				return true;
+			}
+		}
+
+	}
+	return false;
+}
+void CommandMode::Children(const String& id)
+{
+	int i = SelectId(id);
+	if (i != -1)
+	{
+		int j = GetClosingTag(i);
+		for (int index = i + 1; index <= j; index++)
+		{
+			CommandPrompt::xml_content[index].ReWrite();
+			unsigned int size = CommandPrompt::xml_content[index].GetSize();
+			std::cout << "Part:" << CommandPrompt::xml_content[index].TypeOfData()<<": " << CommandPrompt::xml_content[index].GetName() << std::endl;
+			for (unsigned int jndex = 0; jndex < size; jndex++)
+			{
+				std::cout << CommandPrompt::xml_content[index].GetAttribute(jndex).first<< "=\"" << CommandPrompt::xml_content[index].GetAttribute(jndex).second<<"\"\n";
+			}
+			std::cout << "\n";
+		}
+	}
+
+}
+void CommandMode::Child(const String& id, const String& _n)
+{
+	int i = SelectId(id);
+	unsigned int n = GetNumber(_n);
+	unsigned int opening_tag_counter = 0;
+	if (i != -1)
+	{
+		int j = GetClosingTag(i);
+
+		for (int index = i + 1; index <= j; index++)
+		{
+			if (CommandPrompt::xml_content[index].IsOpeningTag())
+			{
+				opening_tag_counter++;
+				if (opening_tag_counter == n - 1)
+				{
+					CommandMode::Children(CommandPrompt::xml_content[index].GetId());
+				}
+			}
+		}
+	}
+}
+void CommandMode::TextOfElement(const String& id)
+{
+	int i = SelectId(id);
+	if (i != -1)
+	{
+		int j = GetClosingTag(i);
+		for (int index = i + 1; index <= j; index++)
+		{
+			if(CommandPrompt::xml_content[index].TypeOfData() == "Text")
+			ìf()
+		}
+	}
+}
+/*static void Delete(const String& id, const String& key);
+static void NewChild(const String& id);
+static void Xpath(const String& command);*/
