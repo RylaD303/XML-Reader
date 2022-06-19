@@ -91,6 +91,10 @@ static void YesOrNo(String& answer)
 
 void CommandPrompt::OpenFile()
 {
+	if (CommandPrompt::opened)
+	{
+		CommandPrompt::Close();
+	}
 	Vector<String> xml_parts;
 	CommandPrompt::file.open(CommandPrompt::file_name.GetData());
 	while (!(CommandPrompt::file.eof()))
@@ -109,7 +113,7 @@ void CommandPrompt::OpenFile()
 		std::cout << CommandPrompt::xml_content[i].GetXMLData() << std::endl;
 	}
 	CommandPrompt::xml_content.CheckIds();
-	file.close();
+	CommandPrompt::opened = true;
 }
 void CommandPrompt::SaveFile()
 {
@@ -120,6 +124,7 @@ void CommandPrompt::SaveFile()
 		WriteFile(CommandPrompt::file);
 		CommandPrompt::saved = true;
 		file.close();
+		std::cout << "File saved." << "\n\n\n";
 	}
 	else
 	{
@@ -139,11 +144,35 @@ void CommandPrompt::Close()
 {
 	if (!(CommandPrompt::saved))
 	{
-		std::cout << "Do you wish to save?" << std::endl;
+		std::cout << "Do you wish to save this file?" << std::endl;
 		String answer;
 		YesOrNo(answer);
-
+		if (answer == "yes")
+		{
+			SaveFile();
+		}
+		CommandPrompt::saved = true;
 	}
+	std::cout << "File closed" << std::endl;
+	CommandPrompt::opened = false;
 }
-void CommandPrompt::Exit();
-void CommandPrompt::CommandMode();
+bool CommandPrompt::Exit()
+{
+	if (CommandPrompt::opened)
+	{
+		CommandPrompt::Close();
+	}
+
+	std::cout << "Do you wish to exit?" << std::endl;
+	String answer;
+	YesOrNo(answer);
+	if (answer == "yes")
+	{
+		return true;
+	}
+	return false;
+}
+void CommandPrompt::CommandMode()
+{
+
+}

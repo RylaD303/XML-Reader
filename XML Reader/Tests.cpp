@@ -2,6 +2,7 @@
 #include "CommandPrompt.h"
 String CommandPrompt::file_name = "";
 bool CommandPrompt::saved = true;
+bool CommandPrompt::opened = false;
 void TestString()
 {
 	String s1("test"), copy(s1), empty("");
