@@ -1,6 +1,7 @@
 #include "../acutest/include/acutest.h"
-#include "XMLContainer.h"
-#include <iostream>
+#include "CommandPrompt.h"
+String CommandPrompt::file_name = "";
+bool CommandPrompt::saved = true;
 void TestString()
 {
 	String s1("test"), copy(s1), empty("");
@@ -164,10 +165,24 @@ void TestXMLContainer()
 	TEST_CHECK(test_container[0].IsOpeningTag());
 	TEST_CHECK(test_container[1].IsClosingTag());
 }
+void TestCommandPrompt()
+{	
+	String command_line("\topen that.xml ");
+	Pair<String> command;
+	command = GetCommand(command_line);
+
+	TEST_CHECK(command.first == "open");
+	TEST_CHECK(command.second == "that.xml");
+	command_line = "\topen     ";
+	command = GetCommand(command_line);
+	TEST_CHECK(command.first == "open");
+	TEST_CHECK(command.second == "");
+}
 
 TEST_LIST = {
 	{"String", TestString},
 	{"Vector", TestVector},
 	{"XMLParts", TestXMLParts},
 	{"XMLContainer",TestXMLContainer},
+	{"CommandPrompt", TestCommandPrompt},
 	{NULL, NULL} };

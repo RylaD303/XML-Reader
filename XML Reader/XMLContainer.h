@@ -5,6 +5,7 @@ class XMLContainer
 private:
 	Vector<XMLPart*> parts;
 public:
+	void CheckIds();
 	~XMLContainer();
 	unsigned int GetSize() const;
 	void Add(const XMLPart& xml_part);

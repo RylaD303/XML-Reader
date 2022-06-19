@@ -13,7 +13,6 @@ Text::Text(const String& string)
 	this->is_open_tag = false;
 	this->is_close_tag = false;
 }
-
 String Text::TypeOfData()
 {
 	return "Text";
@@ -38,28 +37,9 @@ bool Text::CheckValidity()
 	}
 	return true;
 }
-
 XMLPart* Text::Clone()
 {
 	return new Text(*this);
-}
-
-
-
-
-
-
-unsigned int OpeningTag::GetNumberOfAttributes() const
-{
-	return this->attributes.GetSize();
-}
-Pair<String> OpeningTag::GetAttribute(unsigned int index) const
-{
-	return this->attributes[index];
-}
-String OpeningTag::GetId() const
-{
-	return this->id;
 }
 
 
@@ -101,7 +81,6 @@ void OpeningTag::Split()
 	}
 
 }
-
 OpeningTag::OpeningTag(const String& string)
 {
 	this->XML_data = string;
@@ -110,12 +89,24 @@ OpeningTag::OpeningTag(const String& string)
 	this->is_close_tag = false;
 	this->Split();
 }
-
+void OpeningTag::ReWrite()
+{
+	this->XML_data = (String)"<" + this->name;
+	unsigned int size = attributes.GetSize();
+	if (!(this->id == ""))
+	{
+		this->XML_data += (String)" id=\"" + this->id + "\"";
+	}
+	for (unsigned int i = 0; i < size; i++)
+	{
+		this->XML_data += (String)" " + this->attributes[i].first + "=\"" + this->attributes[i].second + "\"";
+	}
+	this->XML_data += (String)">";
+}
 String OpeningTag::TypeOfData()
 {
 	return "OpeningTag";
 }
-
 bool OpeningTag::CheckValidity()
 {
 	unsigned int size = this->XML_data.GetSize();
@@ -132,7 +123,6 @@ bool OpeningTag::CheckValidity()
 	}
 	return true;
 }
-
 XMLPart* OpeningTag::Clone()
 {
 	return new OpeningTag(*this);

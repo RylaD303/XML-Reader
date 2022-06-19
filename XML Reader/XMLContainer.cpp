@@ -1,4 +1,30 @@
 #include "XMLContainer.h"
+
+
+void XMLContainer::CheckIds()
+{
+	unsigned int size = this->parts.GetSize();
+	for (unsigned int i = 0; i < size; i++)
+	{
+		if (!(this->parts[i]->GetId() == ""))
+		{
+			for (unsigned int j = i + 1; j < size; j++)
+			{
+				if (this->parts[i]->GetId() == this->parts[j]->GetId())
+				{
+					this->parts[i]->SetId((String) this->parts[i]->GetId() +  "_1");
+					this->parts[j]->SetId((String)this->parts[j]->GetId() + "_2");
+					this->CheckIds();
+					break;
+				}
+			}
+		}
+	}
+
+}
+
+
+
 XMLContainer::~XMLContainer()
 {
 	unsigned int size = parts.GetSize();
@@ -56,7 +82,6 @@ void XMLContainer::Remove(const unsigned int i, const unsigned int j)
 		this->parts.Remove(index);
 	}
 }
-
 XMLPart& XMLContainer::operator[](unsigned int i)
 {
 	return *this->parts[i];

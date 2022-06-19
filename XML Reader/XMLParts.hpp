@@ -12,12 +12,27 @@ struct Pair
 class XMLPart
 {
 protected:
+	Vector<Pair<String>> attributes;
+	virtual void Split() = 0;
+	String id;
 	String name;
 	String XML_data;
 	bool is_open_tag;
 	bool is_close_tag;
 public:
-	const String& GetName() const 
+	const String GetId() const
+	{
+		return this->id;
+	}
+	const Pair<String> GetAtribute(unsigned int index)
+	{
+		return this->attributes[index];
+	}
+	const unsigned int GetSize() const
+	{
+		return this->attributes.GetSize();
+	}
+	const String& GetName() const
 	{
 		return this->name;
 	}
@@ -35,12 +50,29 @@ public:
 	}
 	void SetXMLData(const String& _data)
 	{
-		this -> XML_data = _data;
+		this->XML_data = _data;
 	}
+	void SetId(const String& _id)
+	{
+		this->id = _id;
+	}
+	void SetName(const String& _name)
+	{
+		this->name = _name;
+	}
+	void SetAttribute(const unsigned int& index, const Pair<String>& _attribute)
+	{
+		if (_attribute.first == "")
+		{
+			this->attributes.Remove(index);
+		}
+		else this->attributes[index] = _attribute;
+	}
+	virtual void ReWrite() = 0;
 	virtual ~XMLPart() = default;
 	virtual String TypeOfData() = 0;
 	virtual bool CheckValidity() = 0;
-	virtual XMLPart* Clone()=0;
+	virtual XMLPart* Clone() = 0;
 	friend bool operator==(const XMLPart& string1, const String& string2)
 	{
 		if (string1.name == string2)
@@ -53,7 +85,10 @@ public:
 
 class Text : public XMLPart
 {
+private:
+	void Split() override {};
 public:
+	void ReWrite() override{};
 	Text(const String& string);
 	String TypeOfData() override;
 	friend bool operator==(const Text& string1, const Text& string2);
@@ -64,14 +99,10 @@ public:
 class OpeningTag : public XMLPart
 {
 private:
-	Vector<Pair<String>> attributes;
-	void Split();
-	String id;
-public:
-	unsigned int GetNumberOfAttributes() const;
-	Pair<String> GetAttribute(unsigned int index) const;
-	String GetId() const;
 
+	void Split() override;
+public:
+	void ReWrite() override;
 	OpeningTag(const String& string);
 	String TypeOfData() override;
 	bool CheckValidity() override;
@@ -81,8 +112,9 @@ public:
 class ClosingTag : public XMLPart
 {
 private:
-	void Split();
+	void Split() override;
 public:
+	void ReWrite() override {};
 	ClosingTag(const String& string);
 	String TypeOfData() override;
 	bool CheckValidity() override;
