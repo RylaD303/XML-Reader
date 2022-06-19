@@ -40,15 +40,7 @@ Vector<String> Strip(String& command_line)
 	return command;
 }
 
-static bool CheckXMLFileValidity(const String& file_name)
-{
-	unsigned int size = file_name.GetSize();
-	if (size >= 5)
-	{
-		return !(file_name[size - 1] != 'l' && file_name[size - 2] != 'm' && file_name[size - 3] != 'x' && file_name[size - 4] != '.' && file_name[size - 5] == '.');
-	}
-	return false;
-}
+
 static void ReWrite()
 {
 	unsigned int size = CommandPrompt::xml_content.GetSize();
@@ -259,6 +251,7 @@ bool CommandMode::Set(const String& id, const String& key, const String& value)
 				attribute.second = value;
 				CommandPrompt::xml_content[i].SetAttribute(j, attribute);
 				std::cout << "Successfully changed" << std::endl;
+				CommandPrompt::saved = false;
 				return true;
 			}
 		}
@@ -336,6 +329,7 @@ bool CommandMode::Delete(const String& id, const String& key)
 			{
 				Pair<String> empty;
 				CommandPrompt::xml_content[i].SetAttribute(j, empty);
+				CommandPrompt::saved = false;
 				return true;
 			}
 		}
