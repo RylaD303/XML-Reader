@@ -129,7 +129,7 @@ bool OpeningTag::CheckValidity()
 	{
 		return false;
 	}
-	for (int i = 1; i < size-1; i++)
+	for (unsigned int i = 1; i < size-1; i++)
 	{
 		if (this->XML_data[i] == '>' || this->XML_data[i] == '<' || this->XML_data[i] == '/')
 		{
@@ -176,7 +176,7 @@ bool ClosingTag::CheckValidity()
 	{
 		return false;
 	}
-	for (int i = 2; i < size - 1; i++)
+	for (unsigned int i = 2; i < size - 1; i++)
 	{
 		if (this->XML_data[i] == '>' || this->XML_data[i] == '<' || this->XML_data[i] == '/')
 		{

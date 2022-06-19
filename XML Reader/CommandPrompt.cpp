@@ -21,6 +21,24 @@ Vector<String> GetCommand(String& command_line)
 	
 	return command;
 }
+Vector<String> Strip(String& command_line)
+{
+	unsigned int i = 0, j;
+	unsigned int size = command_line.GetSize();
+	Vector<String> command;
+	while (i < size)
+	{
+		j = i;
+		while (command_line[i] != '\t' && command_line[i] != ' ' && command_line[i] != '/'  && command_line[i] != '[' && command_line[i] != ']' && command_line[i] != '@' && i < size)
+		{
+			i++;
+		}
+		command.Add(command_line.GetSubString(j, i));
+		i++;
+	}
+
+	return command;
+}
 
 static bool CheckXMLFileValidity(const String& file_name)
 {
@@ -95,7 +113,7 @@ static int SelectId(const String& id)
 static int GetClosingTag(const int i)
 {
 	unsigned int size = CommandPrompt::xml_content.GetSize();
-	int j = i+1;
+	unsigned int j = i+1;
 	for (j; j > size; j++)
 	{
 		if (CommandPrompt::xml_content[i] == CommandPrompt::xml_content[j].GetName())
@@ -298,11 +316,125 @@ void CommandMode::TextOfElement(const String& id)
 		int j = GetClosingTag(i);
 		for (int index = i + 1; index <= j; index++)
 		{
-			if(CommandPrompt::xml_content[index].TypeOfData() == "Text")
-			ìf()
+			if (CommandPrompt::xml_content[index].TypeOfData() == "Text")
+			{
+				std::cout << CommandPrompt::xml_content[index - 1].GetName() << ": " << std::endl;
+			}
 		}
 	}
 }
-/*static void Delete(const String& id, const String& key);
-static void NewChild(const String& id);
-static void Xpath(const String& command);*/
+bool CommandMode::Delete(const String& id, const String& key)
+{
+	int i = SelectId(id);
+	if (i != -1)
+	{
+		unsigned int number_of_attributes = CommandPrompt::xml_content[i].GetSize();
+		for (unsigned int j = 0; j < number_of_attributes; j++)
+		{
+			Pair<String> attribute = CommandPrompt::xml_content[i].GetAttribute(j);
+			if (attribute.first == key)
+			{
+				Pair<String> empty;
+				CommandPrompt::xml_content[i].SetAttribute(j, empty);
+				return true;
+			}
+		}
+
+	}
+	return false;
+}
+
+/*static void NewChild(const String& id);*/
+
+void CommandMode::Xpath(String& command)
+{
+	if (strstr(command.GetData(), "@"))
+	{
+		Vector<String> commands = Strip(command);
+		ReWrite();
+		if (commands[1] == "id")
+		{
+			unsigned int size = CommandPrompt::xml_content.GetSize();
+			for (int i = 0; i < size; i++)
+			{
+				if (CommandPrompt::xml_content[i] == commands[0])
+				{
+					int close_location = GetClosingTag(i);
+					for (int j = i; j < close_location; j++)
+					{
+						if (CommandPrompt::xml_content[j].IsOpeningTag())
+						{
+							std::cout << commands[1] << ": " << CommandPrompt::xml_content[j].GetId() << std::endl;
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			unsigned int size = CommandPrompt::xml_content.GetSize();
+			for (int i = 0; i < size; i++)
+			{
+				if (CommandPrompt::xml_content[i] == commands[0])
+				{
+					int close_location = GetClosingTag(i);
+					for (int j = i; j < close_location; j++)
+					{
+						if (CommandMode::Select(CommandPrompt::xml_content[j].GetId(), commands[1]));
+					}
+				}
+			}
+		}
+	}
+	else if (strstr(command.GetData(), "/"))
+	{
+		String empty;
+		Vector<String> commands = Strip(command);
+		commands.Add(empty);
+		if (!(commands[2] == ""))
+		{
+			int n = GetNumber(commands[2]);
+			ReWrite();
+			unsigned int size = CommandPrompt::xml_content.GetSize();
+			int counter = 0;
+			for (int i = 0; i < size; i++)
+			{
+				if (CommandPrompt::xml_content[i] == commands[0])
+				{
+					int close_location = GetClosingTag(i);
+					for (int j = i+1;  j< close_location; j++)
+					{
+						if (CommandPrompt::xml_content[j] == commands[1])
+						{
+							if (counter == n)
+							{
+								std::cout << commands[1] << ": "<< CommandPrompt::xml_content[j + 1].GetXMLData() << std::endl;
+							}
+							else n++;
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			ReWrite();
+			unsigned int size = CommandPrompt::xml_content.GetSize();
+			for (int i = 0; i < size; i++)
+			{
+				if (CommandPrompt::xml_content[i] == commands[0])
+				{
+					int close_location = GetClosingTag(i);
+					for (int j = i + 1; j < close_location; j++)
+					{
+						if (CommandPrompt::xml_content[j] == commands[1])
+						{
+								std::cout << commands[1] <<": " << CommandPrompt::xml_content[j + 1].GetXMLData() << std::endl;
+						}
+					}
+				}
+			}
+		}
+
+	}
+}

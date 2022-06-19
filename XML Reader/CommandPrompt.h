@@ -29,8 +29,8 @@ public:
 	static void Children(const String& id);
 	static void Child(const String& id, const String& _n);
 	static void TextOfElement(const String& id);
-	static void Delete(const String& id, const String& key);
+	static bool Delete(const String& id, const String& key);
 	static void NewChild(const String& id);
-	static void Xpath(const String& command);
+	static void Xpath(String& command);
 
 };
