@@ -24,7 +24,7 @@ public:
 	{
 		return this->id;
 	}
-	const Pair<String> GetAtribute(unsigned int index)
+	const Pair<String> GetAttribute(unsigned int index)
 	{
 		return this->attributes[index];
 	}

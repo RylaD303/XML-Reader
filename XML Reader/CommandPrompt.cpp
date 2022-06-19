@@ -1,31 +1,24 @@
 #include "CommandPrompt.h"
 
-Pair<String> GetCommand(String& command_line)
+Vector<String> GetCommand(String& command_line)
 {
 	unsigned int i = 0, j;
 	unsigned int size = command_line.GetSize();
-	while ((command_line[i] == '\t' || command_line[i] == ' ') && i<size)
+	Vector<String> command;
+	while (i < size)
 	{
-		i++;
+		while ((command_line[i] == '\t' || command_line[i] == ' ') && i < size)
+		{
+			i++;
+		}
+		j = i;
+		while (command_line[i] != '\t' && command_line[i] != ' ' && i < size)
+		{
+			i++;
+		}
+		command.Add(command_line.GetSubString(j, i));
 	}
-	j = i;
-	while (command_line[i] != '\t' && command_line[i] != ' ' && i<size)
-	{
-		i++;
-	}
-	Pair<String> command;
-
-	command.first = command_line.GetSubString(j, i);
-	while ((command_line[i] == '\t' || command_line[i] == ' ') && i < size)
-	{
-		i++;
-	}
-	j = i;
-	while (command_line[i] != '\t' && command_line[i] != ' ' && i < size)
-	{
-		i++;
-	}
-	command.second = command_line.GetSubString(j, i);
+	
 	return command;
 }
 
@@ -171,8 +164,4 @@ bool CommandPrompt::Exit()
 		return true;
 	}
 	return false;
-}
-void CommandPrompt::CommandMode()
-{
-
 }
