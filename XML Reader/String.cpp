@@ -12,6 +12,13 @@ String::String(const char* data)
 	this->data = new char[this->size + 1];
 	strcpy_s(this->data, this->size + 1, data);
 }
+String::String(const char data)
+{
+	this->size = 1;
+	this->data = new char[2];
+	this->data[0] = data;
+	this->data[1] = '\0';
+}
 String::String(const String& other)
 {
 	this->size = other.GetSize();
@@ -39,7 +46,7 @@ String& String::operator=(const String& other)
 		Free();
 		this->size = other.GetSize();
 		this->data = new char[this->size + 1];
-		strcpy_s(this->data, other.GetSize() + 1, other.GetData());
+		strcpy_s(this->data, other.GetSize()+1, other.GetData());
 	}
 	return *this;
 }
@@ -54,7 +61,7 @@ String String::operator+(const String& other)
 String& String::operator+=(const String& other)
 {
 	char* data = new char[this->size + 1];
-	strcpy_s(data, this->size + 1, this->data);
+	strcpy_s(data, this->size+1, this->data);
 	this->Free();
 	this->data = new char[this->size + other.GetSize() + 1];
 	strcpy_s(this->data, this->size + 1, data);
@@ -149,12 +156,13 @@ void String::GetTags(Vector<String>& strings)
 		}
 		i++;
 	}
-
-	String last_word = this->GetSubString(j,i);
+	
+	String last_word = this->GetSubString(j, i);
 	
 	if (!(last_word == "") && !(last_word== " "))
 	{
 		strings.Add(last_word);
 	}
+	
 
 }

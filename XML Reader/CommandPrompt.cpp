@@ -57,11 +57,11 @@ static void Show()
 	int tabulations = 0;
 	for (int i = 0; i < size; i++)
 	{
+		if (CommandPrompt::xml_content[i].IsClosingTag())tabulations--;
 		bool text = (!CommandPrompt::xml_content[i].IsOpeningTag() && !CommandPrompt::xml_content[i].IsClosingTag());
 		for (int j = 0; j < tabulations - text; j++)std::cout << "\t";
 
 		if (CommandPrompt::xml_content[i].IsOpeningTag())tabulations++;
-		if (CommandPrompt::xml_content[i].IsClosingTag())tabulations--;
 		std::cout << CommandPrompt::xml_content[i].GetXMLData() << std::endl;
 	}
 }
@@ -106,10 +106,12 @@ static int GetClosingTag(const int i)
 {
 	unsigned int size = CommandPrompt::xml_content.GetSize();
 	unsigned int j = i+1;
-	for (j; j > size; j++)
+	for (j; j < size; j++)
 	{
-		if (CommandPrompt::xml_content[i] == CommandPrompt::xml_content[j].GetName())
+		if (CommandPrompt::xml_content[i].GetName() == CommandPrompt::xml_content[j].GetName()) 
+		{
 			return j;
+		}
 	}
 
 	return j;
@@ -147,10 +149,7 @@ void CommandPrompt::OpenFile()
 	{
 		CommandPrompt::xml_content.Add(xml_parts[i]);
 	}
-	for (unsigned int i = 0; i < size; i++)
-	{
-		std::cout << CommandPrompt::xml_content[i].GetXMLData() << std::endl;
-	}
+	Show();
 	CommandPrompt::xml_content.CheckIds();
 	CommandPrompt::opened = true;
 }
@@ -265,7 +264,7 @@ void CommandMode::Children(const String& id)
 	if (i != -1)
 	{
 		int j = GetClosingTag(i);
-		for (int index = i + 1; index <= j; index++)
+		for (int index = i + 1; index < j; index++)
 		{
 			CommandPrompt::xml_content[index].ReWrite();
 			unsigned int size = CommandPrompt::xml_content[index].GetSize();
@@ -288,15 +287,15 @@ void CommandMode::Child(const String& id, const String& _n)
 	{
 		int j = GetClosingTag(i);
 
-		for (int index = i + 1; index <= j; index++)
+		for (int index = i + 1; index < j; index++)
 		{
 			if (CommandPrompt::xml_content[index].IsOpeningTag())
 			{
-				opening_tag_counter++;
 				if (opening_tag_counter == n - 1)
 				{
 					CommandMode::Children(CommandPrompt::xml_content[index].GetId());
 				}
+				opening_tag_counter++;
 			}
 		}
 	}
@@ -337,8 +336,20 @@ bool CommandMode::Delete(const String& id, const String& key)
 	}
 	return false;
 }
+void CommandMode::NewChild(const String& id)
+{
+	int i = SelectId(id);
+	if (i != -1)
+	{
+		if (CommandPrompt::xml_content[i + 1].IsOpeningTag())
+		{
+			int j = GetClosingTag(i + 1);
+			CommandPrompt::xml_content.AddInPosition(i + 1, CommandPrompt::xml_content[j]);
+			CommandPrompt::xml_content.AddInPosition(i + 1, CommandPrompt::xml_content[i + 2]);
+		}
+	}
+}
 
-/*static void NewChild(const String& id);*/
 
 void CommandMode::Xpath(String& command)
 {
@@ -393,12 +404,13 @@ void CommandMode::Xpath(String& command)
 			int counter = 0;
 			for (int i = 0; i < size; i++)
 			{
-				if (CommandPrompt::xml_content[i] == commands[0])
+				if (CommandPrompt::xml_content[i] == commands[0] && CommandPrompt::xml_content[i].IsOpeningTag())
 				{
 					int close_location = GetClosingTag(i);
 					for (int j = i+1;  j< close_location; j++)
 					{
-						if (CommandPrompt::xml_content[j] == commands[1])
+						
+						if (CommandPrompt::xml_content[j] == commands[1] && CommandPrompt::xml_content[i].IsOpeningTag())
 						{
 							if (counter == n)
 							{
@@ -416,12 +428,12 @@ void CommandMode::Xpath(String& command)
 			unsigned int size = CommandPrompt::xml_content.GetSize();
 			for (int i = 0; i < size; i++)
 			{
-				if (CommandPrompt::xml_content[i] == commands[0])
+				if (CommandPrompt::xml_content[i] == commands[0] && CommandPrompt::xml_content[i].IsOpeningTag())
 				{
 					int close_location = GetClosingTag(i);
 					for (int j = i + 1; j < close_location; j++)
 					{
-						if (CommandPrompt::xml_content[j] == commands[1])
+						if (CommandPrompt::xml_content[j] == commands[1] && CommandPrompt::xml_content[j].IsOpeningTag())
 						{
 								std::cout << commands[1] <<": " << CommandPrompt::xml_content[j + 1].GetXMLData() << std::endl;
 						}

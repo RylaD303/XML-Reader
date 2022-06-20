@@ -1,4 +1,10 @@
 /*#include "../acutest/include/acutest.h"
+#include "CommandPrompt.h"
+String CommandPrompt::file_name = "";
+bool CommandPrompt::saved = true;
+bool CommandPrompt::opened = false;
+XMLContainer CommandPrompt::xml_content;
+std::fstream CommandPrompt::file;
 void TestString()
 {
 	String s1("test"), copy(s1), empty("");
@@ -59,6 +65,23 @@ void TestVector()
 	TEST_CHECK(vec2.GetSize() == 9);
 	TEST_CHECK(vec2[0] == 1);
 	TEST_CHECK(vec2[1] == 2);
+
+
+
+	Vector<String> vec3;
+	String rand = "<blah>";
+	vec3.Add(rand);
+	vec3.Add(rand);
+	vec3.Add(rand);
+	vec3.Add(rand);
+	rand = "</blah>";
+	vec3.Add(rand);
+	vec3.Add(rand);
+	vec3.Add(rand);
+	vec3.Add(rand);
+	vec3.Add(rand);
+	vec3.Add(rand);
+	TEST_CHECK(vec3.GetSize() == 10);
 }
 
 
@@ -103,7 +126,6 @@ void TestXMLParts()
 	OpeningTag open_tag2("<opening>");
 	TEST_CHECK(open_tag2.GetName() == "opening");
 	TEST_CHECK(!(open_tag2.GetName() == "opening "));
-	TEST_CHECK(open_tag2.GetId() == "");
 
 
 

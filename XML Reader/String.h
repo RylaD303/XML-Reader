@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #include<iostream>
 #include"Vector.hpp"
 /**
@@ -20,6 +19,10 @@ public:
 		Default constructor and constructor with parameters
 	*/
 	String(const char* data = "");
+	/**
+	Copy constructor for char
+	*/
+	String(const char data);
 	/**
 		classic Copy constructor
 	*/

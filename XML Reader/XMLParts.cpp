@@ -9,7 +9,7 @@ String GetElementCounter()
 	while (element_counter_copy > 0)
 	{
 		char num = (char)(element_counter_copy % 10 + '0');
-		number += (String)&num;
+		number += num;
 		element_counter_copy /= 10;
 	}
 	return number;

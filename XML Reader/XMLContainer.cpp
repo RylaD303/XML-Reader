@@ -75,6 +75,25 @@ void XMLContainer::Add(const String& xml_part)
 		this->parts.Add(text.Clone());
 	}
 }
+void XMLContainer::AddInPosition(unsigned int i, const XMLPart& xml_part)
+{
+	unsigned int size = xml_part.GetXMLData().GetSize();
+	if (xml_part.GetXMLData()[0] == '<' && xml_part.GetXMLData()[1] == '/' && xml_part.GetXMLData()[size - 1] == '>')
+	{
+		ClosingTag closing_tag((String)"</" + xml_part.GetName() + ">");
+		this->parts.AddInPosition(i, closing_tag.Clone());
+	}
+	else if (xml_part.GetXMLData()[0] == '<' && xml_part.GetXMLData()[size - 1] == '>')
+	{
+		OpeningTag opening_tag((String)"<" + xml_part.GetName() + ">");
+		this->parts.AddInPosition(i, opening_tag.Clone());
+	}
+	else
+	{
+		Text text(xml_part.GetXMLData());
+		this->parts.AddInPosition(i, text.Clone());
+	}
+}
 void XMLContainer::Remove(const unsigned int i, const unsigned int j)
 {
 	for (int index = j; index >= i; index--)

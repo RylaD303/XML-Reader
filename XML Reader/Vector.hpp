@@ -17,6 +17,22 @@ private:
 	{
 		delete[] this->data;
 	}
+	/**
+		Expand method. Doubles the capacity of the Vector and gets care of the dynamic memory.
+		Copies the current objext into another one, deletes the current memory, creates new, double the capacity,
+		and then copies the values back from the copy vector.
+	*/
+	void Expand()
+	{
+		Vector copy(*this);
+		this->Free();
+		this->capacity *= 2;
+		this->data = new T[this->capacity];
+		for (unsigned int i = 0; i < size; i++)
+		{
+			this->data[i] = copy.data[i];
+		}
+	}
 public:
 	/**
 		Vector default constructor. Sets the capacity of the memory to 8.
@@ -75,23 +91,6 @@ public:
 		return this->size;
 	}
 
-
-	/**
-		Expand method. Doubles the capacity of the Vector and gets care of the dynamic memory.
-		Copies the current objext into another one, deletes the current memory, creates new, double the capacity,
-		and then copies the values back from the copy vector.
-	*/
-	void Expand()
-	{
-		Vector copy(*this);
-		this->Free();
-		this->capacity *= 2;
-		this->data = new T[this->capacity];
-		for (unsigned int i = 0; i <= size; i++)
-		{
-			this->data[i] = copy.data[i];
-		}
-	}
 	/**
 		Adds new value of the same type to the Vector and increases it's size. If the size gets too big, the vector expands.
 	*/
@@ -104,7 +103,22 @@ public:
 		this->data[this->size] = something;
 		this->size++;
 	}
-
+	/**
+		Adds new value of the same type to the Vector in the specified position and increases it's size. If the size gets too big, the vector expands.
+	*/
+	void AddInPosition(unsigned int index, const T& something)
+	{
+		if (this->size + 1 > this->capacity)
+		{
+			this->Expand();
+		}
+		for (unsigned int i = this->size; i > index; i++)
+		{
+			this->data[i] = this->data[i - 1];
+		}
+		this->data[index] = something;
+		this->size++;
+	}
 	/**
 		Removes some object from the vector, checks if it has that object, otherwise does nothing.
 	*/

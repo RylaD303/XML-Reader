@@ -153,5 +153,6 @@ int main()
         std::cout << "Available commands: open,exit, save, saveas, close, help";
         if (CommandPrompt::opened) std::cout << help_message;
         std::cout << "\n";
+        std::cin >> command;
     }
 }

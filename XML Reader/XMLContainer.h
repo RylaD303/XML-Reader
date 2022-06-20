@@ -10,6 +10,7 @@ public:
 	unsigned int GetSize() const;
 	void Add(const XMLPart& xml_part);
 	void Add(const String& xml_part);
+	void AddInPosition(unsigned int i, const XMLPart& xml_part);
 	void Remove(const unsigned int i, const unsigned int j);
 	XMLPart& operator[](const unsigned int i);
 	const XMLPart& operator[](const unsigned int i) const;
