@@ -14,10 +14,12 @@ bool CommandPrompt::saved = true;
 bool CommandPrompt::opened = false;
 XMLContainer CommandPrompt::xml_content;
 std::fstream CommandPrompt::file;
-String help_message(",print, select <id> <key>, set <id> <key>  <value>, children <id>, child <id> <n>, text <id>, delete <id>  <key>,xpath <id> < XPath >");
+String help_message("\nprint\nselect <id> <key>\nset <id> <key> <value>\nchildren <id>\nchild <id> <n>\ntext <id>\ndelete <id>  <key>\nxpath <XPath>");
+String message("\n Available commands : \nopen\nexit\nsave\nsaveas\nclose\nhelp\n");
 int main()
 {
-    std::cout << "Welcome to xml reader. \n Available commands: open,exit, save, saveas, close, help\n";
+    std::cout << "Welcome to xml reader. \n Available commands:"<<message;
+    std::cout << std::endl << std::endl;
     String command;
     std::cin >> command;
     while (true)
@@ -26,7 +28,7 @@ int main()
         unsigned int size = commands.GetSize();
         if (commands[0] == "help" && size == 1)
         {
-            std::cout << "Available commands: open,exit, save, saveas, close, help";
+            std::cout << message;
             if (CommandPrompt::opened) std::cout << help_message;
             std::cout << "\n";
         }
@@ -150,9 +152,9 @@ int main()
             }
         }
         else std::cout << "Impropable command, try again!\n" << std::endl;
-        std::cout << "Available commands: open,exit, save, saveas, close, help";
+        std::cout << message;
         if (CommandPrompt::opened) std::cout << help_message;
-        std::cout << "\n";
+        std::cout << "\n" << "\n";
         std::cin >> command;
     }
 }

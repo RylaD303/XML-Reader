@@ -143,6 +143,9 @@ public:
 			}
 		}
 	}
+	/**	
+		removes element at index i
+	*/
 	void Remove(unsigned int i)
 	{
 		if(i < this->size)

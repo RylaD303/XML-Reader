@@ -86,9 +86,13 @@ public:
 	*/
 	friend bool operator==(const String& string1, const String& string2);
 
-
+	/**
+		Gets substring
+	*/
 	String GetSubString(unsigned int i, unsigned int j);
-
+	/**
+		returns all the tags found in the string line
+	*/
 	void GetTags(Vector<String>& strings);
 };
 
