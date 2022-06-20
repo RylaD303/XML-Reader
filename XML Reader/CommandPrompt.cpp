@@ -149,8 +149,8 @@ void CommandPrompt::OpenFile()
 	{
 		CommandPrompt::xml_content.Add(xml_parts[i]);
 	}
-	Show();
 	CommandPrompt::xml_content.CheckIds();
+	Show();
 	CommandPrompt::opened = true;
 }
 void CommandPrompt::SaveFile()
